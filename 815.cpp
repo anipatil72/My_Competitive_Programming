@@ -7,6 +7,54 @@
 #define ull unsigned long long
 using namespace std;
 
+int64_t inv_mod(int64_t a, int64_t m)
+{
+    // https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Example
+    int64_t g = m, r = a, x = 0, y = 1;
+
+    while (r != 0)
+    {
+        int64_t q = g / r;
+        g %= r;
+        swap(g, r);
+        x -= q * y;
+        swap(x, y);
+    }
+
+    assert(g == 1);
+    assert(y == m || y == -m);
+    return x < 0 ? x + m : x;
+}
+
+// Returns a number that is a1 mod m1 and a2 mod m2. Assumes m1 and m2 are relatively prime.
+int64_t chinese_remainder_theorem(int64_t a1, int64_t m1, int64_t a2, int64_t m2)
+{
+    if (m1 < m2)
+        return chinese_remainder_theorem(a2, m2, a1, m1);
+
+    // assert(__gcd(m1, m2) == 1);
+    assert(m1 >= m2);
+    int64_t k = (a2 - a1) % m2 * inv_mod(m1, m2) % m2;
+    int64_t result = a1 + k * m1;
+
+    if (result < 0)
+        result += m1 * m2;
+
+    assert(0 <= result && result < m1 * m2);
+    assert(result % m1 == a1 && result % m2 == a2);
+    return result;
+}
+
+int64_t non_relatively_prime_crt(int64_t a1, int64_t m1, int64_t a2, int64_t m2)
+{
+    int64_t g = gcd(m1, m2);
+
+    if (a1 % g != a2 % g)
+        return -1;
+
+    return chinese_remainder_theorem(a1 / g, m1 / g, a2 / g, m2 / g) * g + a1 % g;
+}
+
 template <typename T_vector>
 void output_vector(const T_vector &v, bool add_one = false, int start = -1, int end = -1)
 {
