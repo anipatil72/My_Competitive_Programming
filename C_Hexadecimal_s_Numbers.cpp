@@ -117,6 +117,8 @@ int main()
     std::cin >> n;
     p(1);
     std::cout << cnt;
+
+    return 0;
 }
 
 // ॥ जय श्री राम जय श्री कृष्ण ॥
