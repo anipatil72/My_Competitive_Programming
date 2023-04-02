@@ -7,17 +7,26 @@
 #define ull unsigned long long
 using namespace std;
 
-void printvector(vector<int> &a)
+template <typename T_vector>
+void output_vector(const T_vector &v, bool add_one = false, int start = -1, int end = -1)
 {
+    if (start < 0)
+        start = 0;
+    if (end < 0)
+        end = int(v.size());
 
-    int n = a.size();
-
-    for (int i = 0; i < n; i++)
+    for (int i = start; i < end; i++)
     {
-        cout << a[i] << " ";
-    }
 
-    cout << endl;
+        if (i == end - 1)
+        {
+            cout << v[i] + (add_one ? 1 : 0) << endl;
+        }
+        else
+        {
+            cout << v[i] + (add_one ? 1 : 0) << ' ';
+        }
+    }
 }
 
 vector<int> successfulPairs(vector<int> &spells, vector<int> &potions, long long success)
@@ -56,7 +65,7 @@ int main()
 
     vector<int> ans = successfulPairs(spells, potions, success);
 
-    printvector(ans);
+    output_vector(ans);
 
     return 0;
 }
