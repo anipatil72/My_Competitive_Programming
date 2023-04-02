@@ -18,6 +18,7 @@ using namespace std;
 #define ll long long
 #define ull unsigned long long
 #define uint unsigned int
+#define lld long double
 
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll myRandomNumber(ll B)
@@ -78,7 +79,7 @@ ll check(ll b, ll a, int minus)
 
     long double ans = (long double)b + (1.0 * minus) * anss;
 
-    if ((ll)(ans)-ans == 0)
+    if ((ll)(ans)-ans == 0.0)
     {
         return (ll)ans;
     }
@@ -93,53 +94,104 @@ ll check(ll b, ll a, int minus)
 
 void solve()
 {
+    // int n, m;
+
+    // cin >> n >> m;
+
+    // vector<int> slopes(n);
+
+    // for (int i = 0; i < n; i++)
+    // {
+
+    //     cin >> slopes[i];
+    // }
+
+    // sort(slopes.begin(), slopes.end());
+
+    // for (int i = 0; i < m; i++)
+    // {
+    //     ll a, b, c;
+
+    //     cin >> a >> b >> c;
+
+    //     if (a * c <= 0)
+    //     {
+    //         cout << "NO" << endl;
+
+    //         continue;
+    //     }
+
     int n, m;
-
     cin >> n >> m;
-
-    vector<int> slopes(n);
-
+    vector<lld> slopes;
     for (int i = 0; i < n; i++)
     {
-
-        cin >> slopes[i];
+        lld x;
+        cin >> x;
+        slopes.push_back(x);
     }
 
     sort(slopes.begin(), slopes.end());
 
-    for (int i = 0; i < m; i++)
+    for (int j = 0; j < m; j++)
     {
-        ll a, b, c;
-
+        lld a, b, c;
         cin >> a >> b >> c;
-
-        if (a * c <= 0)
+        lld val = b - 2.0 * sqrtl(a * c);
+        lld val2 = b + 2.0 * sqrtl(a * c);
+        auto itr = (int)(upper_bound(slopes.begin(), slopes.end(), val) - slopes.begin());
+        if (itr == (int)(slopes.size()))
         {
             cout << "NO" << endl;
-
             continue;
         }
-
-        ll left = check(b, 4 * a * c, -1);
-
-        ll right = check(b, 4 * a * c, 1);
-
-        ll mini = min(left, right);
-        ll maxi = max(left, right);
-
-        auto lef = upper_bound(slopes.begin(), slopes.end(), mini);
-        auto rig = lower_bound(slopes.begin(), slopes.end(), maxi);
-
-        if (lef == rig)
+        lld value = slopes[itr];
+        // debug(val)
+        // debug(val2)
+        if (value > val and value < val2)
         {
-            cout << "NO" << endl;
+            cout << "YES" << endl;
+            cout << (int)(slopes[itr]) << endl;
         }
         else
         {
-            cout << "YES" << endl;
-            cout << (*lef) << endl;
+            cout << "NO" << endl;
         }
     }
+
+    //     ll left = check(b, 4 * a * c, -1);
+
+    //     ll right = check(b, 4 * a * c, 1);
+
+    //     ll mini = min(left, right);
+    //     ll maxi = max(left, right);
+
+    //     auto lef = upper_bound(slopes.begin(), slopes.end(), mini);
+    //     auto rig = lower_bound(slopes.begin(), slopes.end(), maxi);
+
+    //     if (lef == rig)
+    //     {
+    //         cout << "NO" << endl;
+    //     }
+    //     else if (lef == slopes.end())
+    //     {
+    //         cout << "NO" << endl;
+    //     }
+    //     else
+    //     {
+
+    //         if (rig - lef >= 1)
+    //         {
+
+    //             cout << "YES" << endl;
+    //             cout << (*lef) << endl;
+    //         }
+    //         else
+    //         {
+    //             cout << "NO" << endl;
+    //         }
+    //     }
+    // }
 }
 
 int main()
