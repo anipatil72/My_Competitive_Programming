@@ -94,104 +94,104 @@ ll check(ll b, ll a, int minus)
 
 void solve()
 {
-    // int n, m;
-
-    // cin >> n >> m;
-
-    // vector<int> slopes(n);
-
-    // for (int i = 0; i < n; i++)
-    // {
-
-    //     cin >> slopes[i];
-    // }
-
-    // sort(slopes.begin(), slopes.end());
-
-    // for (int i = 0; i < m; i++)
-    // {
-    //     ll a, b, c;
-
-    //     cin >> a >> b >> c;
-
-    //     if (a * c <= 0)
-    //     {
-    //         cout << "NO" << endl;
-
-    //         continue;
-    //     }
-
     int n, m;
+
     cin >> n >> m;
-    vector<lld> slopes;
+
+    vector<int> slopes(n);
+
     for (int i = 0; i < n; i++)
     {
-        lld x;
-        cin >> x;
-        slopes.push_back(x);
+
+        cin >> slopes[i];
     }
 
     sort(slopes.begin(), slopes.end());
 
-    for (int j = 0; j < m; j++)
+    for (int i = 0; i < m; i++)
     {
-        lld a, b, c;
+        ll a, b, c;
+
         cin >> a >> b >> c;
-        lld val = b - 2.0 * sqrtl(a * c);
-        lld val2 = b + 2.0 * sqrtl(a * c);
-        auto itr = (int)(upper_bound(slopes.begin(), slopes.end(), val) - slopes.begin());
-        if (itr == (int)(slopes.size()))
+
+        if (a * c <= 0)
         {
             cout << "NO" << endl;
+
             continue;
         }
-        lld value = slopes[itr];
-        // debug(val)
-        // debug(val2)
-        if (value > val and value < val2)
+
+        // int n, m;
+        // cin >> n >> m;
+        // vector<lld> slopes;
+        // for (int i = 0; i < n; i++)
+        // {
+        //     lld x;
+        //     cin >> x;
+        //     slopes.push_back(x);
+        // }
+
+        // sort(slopes.begin(), slopes.end());
+
+        // for (int j = 0; j < m; j++)
+        // {
+        //     lld a, b, c;
+        //     cin >> a >> b >> c;
+        //     lld val = b - 2.0 * sqrtl(a * c);
+        //     lld val2 = b + 2.0 * sqrtl(a * c);
+        //     auto itr = (int)(upper_bound(slopes.begin(), slopes.end(), val) - slopes.begin());
+        //     if (itr == (int)(slopes.size()))
+        //     {
+        //         cout << "NO" << endl;
+        //         continue;
+        //     }
+        //     lld value = slopes[itr];
+        //     // debug(val)
+        //     // debug(val2)
+        //     if (value > val and value < val2)
+        //     {
+        //         cout << "YES" << endl;
+        //         cout << (int)(slopes[itr]) << endl;
+        //     }
+        //     else
+        //     {
+        //         cout << "NO" << endl;
+        //     }
+        // }
+
+        ll left = check(b, 4 * a * c, -1);
+
+        ll right = check(b, 4 * a * c, 1);
+
+        ll mini = min(left, right);
+        ll maxi = max(left, right);
+
+        auto lef = upper_bound(slopes.begin(), slopes.end(), mini);
+        auto rig = lower_bound(slopes.begin(), slopes.end(), maxi);
+
+        if (lef == rig)
         {
-            cout << "YES" << endl;
-            cout << (int)(slopes[itr]) << endl;
+            cout << "NO" << endl;
+        }
+        else if (lef == slopes.end())
+        {
+            cout << "NO" << endl;
         }
         else
         {
-            cout << "NO" << endl;
+
+            if (rig - lef >= 1)
+            {
+
+                cout << "YES" << endl;
+                cout << (*lef) << endl;
+            }
+            else
+            {
+                cout << "NO" << endl;
+            }
         }
     }
-
-    //     ll left = check(b, 4 * a * c, -1);
-
-    //     ll right = check(b, 4 * a * c, 1);
-
-    //     ll mini = min(left, right);
-    //     ll maxi = max(left, right);
-
-    //     auto lef = upper_bound(slopes.begin(), slopes.end(), mini);
-    //     auto rig = lower_bound(slopes.begin(), slopes.end(), maxi);
-
-    //     if (lef == rig)
-    //     {
-    //         cout << "NO" << endl;
-    //     }
-    //     else if (lef == slopes.end())
-    //     {
-    //         cout << "NO" << endl;
-    //     }
-    //     else
-    //     {
-
-    //         if (rig - lef >= 1)
-    //         {
-
-    //             cout << "YES" << endl;
-    //             cout << (*lef) << endl;
-    //         }
-    //         else
-    //         {
-    //             cout << "NO" << endl;
-    //         }
-    //     }
-    // }
 }
 
 int main()

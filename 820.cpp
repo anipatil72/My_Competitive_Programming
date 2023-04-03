@@ -74,39 +74,6 @@ map<long long, long long> factorize(long long n)
 
 void solve()
 {
-
-    int n;
-
-    cin >> n;
-
-    vector<int> a(n);
-
-    int x = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-
-        x ^= a[i];
-    }
-
-    if (n % 2 == 0 & x != 0)
-    {
-        cout << "-1" << endl;
-    }
-    else
-    {
-        int ans = ~x;
-
-        if (x >= (1 << 8))
-        {
-            cout << "-1" << endl;
-        }
-        else
-        {
-            cout << x << endl;
-        }
-    }
 }
 
 int main()
@@ -118,14 +85,12 @@ int main()
 
     ll t = 1;
 
-    cin >> t;
+    // cin >> t;
 
     for (ll i = 0; i < t; i++)
     {
         solve();
     }
-
-    // cout << (1 ^ 2 ^ 3) << endl;
 
     return 0;
 }

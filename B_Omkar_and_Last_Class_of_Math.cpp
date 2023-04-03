@@ -16,6 +16,7 @@
 #include <chrono>
 using namespace std;
 #define ll long long
+#define lld long double
 #define ull unsigned long long
 #define uint unsigned int
 
@@ -60,6 +61,67 @@ map<long long, long long> factorize(long long n)
     return ans;
 }
 
+// function to check prime
+bool isPrime(int n)
+{
+    if (n == 1)
+    {
+        return false;
+    }
+    if (n == 2 || n == 3)
+    {
+        return true;
+    }
+    if (n % 2 == 0 || n % 3 == 0)
+    {
+        return false;
+    }
+    for (int i = 5; i * i <= n; i = i + 6)
+    {
+        if (n % i == 0)
+        {
+            return false;
+        }
+        if (n % (i + 2) == 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// returns set of all divisors of a natural number
+
+vector<int> getDivisors(int n)
+{
+
+    set<int> s;
+
+    // Note that this loop runs till square root
+    for (int i = 1; i <= sqrt(n); i++)
+    {
+        if (n % i == 0)
+        {
+            // If divisors are equal, print only one
+            if (n / i == i)
+            {
+
+                s.insert(i);
+            }
+            else
+            { // Otherwise print both
+
+                s.insert(i);
+                s.insert(n / i);
+            }
+        }
+    }
+
+    vector<int> ans(s.begin(), s.end());
+
+    return ans;
+}
+
 // -------------------Important Notes------------------- //
 // ***For Interactive Problems remember to remove multi test cases condition*** //
 // (int)log2(x) + 1  -> to calculate number of bits of a number
@@ -74,38 +136,50 @@ map<long long, long long> factorize(long long n)
 
 void solve()
 {
-
     int n;
 
     cin >> n;
 
-    vector<int> a(n);
-
-    int x = 0;
-
-    for (int i = 0; i < n; i++)
+    if (isPrime(n))
     {
-        cin >> a[i];
+        cout << n - 1 << " " << 1 << endl;
 
-        x ^= a[i];
+        return;
     }
 
-    if (n % 2 == 0 & x != 0)
+    if ((n & 1) == 0)
     {
-        cout << "-1" << endl;
+        cout << n / 2 << " " << n / 2 << endl;
     }
     else
     {
-        int ans = ~x;
+        vector<int> tem = getDivisors(n);
 
-        if (x >= (1 << 8))
+        int len = tem.size();
+
+        ll can1 = 0, can2 = 0;
+
+        ll mini = n - 1;
+
+        for (int i = 0; i < len - 1; i++)
         {
-            cout << "-1" << endl;
+            int c = tem[i];
+
+            int d = n - tem[i];
+
+            ll x = c * 1LL * d / __gcd(c, d);
+
+            if (x < mini)
+            {
+                can1 = c;
+
+                can2 = d;
+
+                mini = x;
+            }
         }
-        else
-        {
-            cout << x << endl;
-        }
+
+        cout << can1 << " " << can2 << endl;
     }
 }
 
@@ -124,8 +198,6 @@ int main()
     {
         solve();
     }
-
-    // cout << (1 ^ 2 ^ 3) << endl;
 
     return 0;
 }
