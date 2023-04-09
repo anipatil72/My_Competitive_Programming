@@ -106,95 +106,52 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmeost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-string resNum;
-int diff;                  // minimise the diff.... minimum diff is definitely 0
-bool dp[10][10][19][2][2]; // mx,mn,idx,tight
-// vector<vector<vector<vector<vector<bool>>>>> dp(11,vector<vector<vector<vecor<int>>>>(11,vector<vector<vector<int>>>))
-void rec(int idx, string curr, string beg, string lim, int mx, int mn, bool greaterThanBeg, bool smallerThanMx)
+ll recur(const string &limit, int index, int non_zero, bool smaller)
 {
-    // cout<<idx<<" "<<curr<<" "<<beg<<" "<<lim<<" "<<greaterThanBeg<<" "<<smallerThanMx<<"\n";
-    if (idx == beg.size())
+    if (non_zero > 3)
     {
-        if (diff > (mx - mn))
-        {
-            diff = mx - mn, resNum = curr;
-        }
-        return;
-    }
-    if (dp[mx][mn][idx][greaterThanBeg][smallerThanMx] == 1)
-    {
-        return;
+        return 0;
     }
 
-    dp[mx][mn][idx][greaterThanBeg][smallerThanMx] = 1;
+    if (index == limit.size())
+    {
+        return 1;
+    }
 
-    if (!greaterThanBeg && !smallerThanMx)
-    { // can only use from beg to lim...
-        char org = curr[idx];
-        for (int i = beg[idx] - '0'; i <= lim[idx] - '0'; i++)
-        {
-            curr[idx] = (char)('0' + i);
-            // cout<<"char: "<<curr[idx]<<"\n";
-            rec(idx + 1, curr, beg, lim, mx > i ? mx : i, mn < i ? mn : i, (greaterThanBeg || (i > (beg[idx] - '0'))), (smallerThanMx || ((i < (lim[idx] - '0')))));
-        }
-        curr[idx] = org;
-    }
-    else if (greaterThanBeg && !smallerThanMx)
+    ll res = recur(limit, index + 1, non_zero, smaller ? smaller : limit[index] != '0');
+
+    if (smaller)
     {
-        char org = curr[idx];
-        for (int i = 0; i <= lim[idx] - '0'; i++)
-        {
-            curr[idx] = '0' + i;
-            // cout<<"char2: "<<curr[idx]<<"\n";
-            rec(idx + 1, curr, beg, lim, mx > i ? mx : i, mn < i ? mn : i, 1, curr[idx] < lim[idx]);
-        }
-        curr[idx] = org;
-    }
-    else if (!greaterThanBeg && smallerThanMx)
-    {
-        char org = curr[idx];
-        for (int i = beg[idx] - '0'; i <= 9; i++)
-        {
-            curr[idx] = '0' + i;
-            // cout<<"char3: "<<curr[idx]<<"\n";
-            rec(idx + 1, curr, beg, lim, mx > i ? mx : i, mn < i ? mn : i, curr[idx] > beg[idx], 1);
-        }
-        curr[idx] = org;
+        // Use non zero digits from 1 to 9
+        res += 9 * (recur(limit, index + 1, non_zero + 1, 1));
     }
     else
     {
-        char org = curr[idx];
-        for (int i = 0; i <= 9; i++)
+        // The number is similar
+
+        int lesserr = limit[index] - '0' - 1;
+
+        if (lesserr > 0)
         {
-            curr[idx] = '0' + i;
-            // cout<<"char4: "<<curr[idx]<<"\n";
-            rec(idx + 1, curr, beg, lim, mx > i ? mx : i, mn < i ? mn : i, 1, 1);
+            res += lesserr * (recur(limit, index + 1, non_zero + 1, 1));
         }
 
-        curr[idx] = org;
+        if (limit[index] != '0')
+        {
+            res += recur(limit, index + 1, non_zero + 1, smaller);
+        }
     }
+
+    return res;
 }
 
 void solve()
 {
-    int n = 1, m = 0;
-    string a, b;
-    cin >> a >> b;
-    if (a.size() != b.size())
-    {
-        for (int i = 0; i < a.size(); i++)
-        {
-            cout << "9";
-        } // all 99s.. ans ->0
-        cout << "\n";
-        return;
-    }
-    memset(dp, 0, sizeof dp);
-    diff = 10;
-    string curr = a;
-    resNum = a;
-    rec(0, curr, a, b, 0, 9, 0, 0);
-    cout << resNum << "\n";
+    ll left, right;
+
+    cin >> left >> right;
+
+    cout << (recur(to_string(right), 0, 0, 0) - recur(to_string(left - 1), 0, 0, 0)) << endl;
 }
 
 int main()
