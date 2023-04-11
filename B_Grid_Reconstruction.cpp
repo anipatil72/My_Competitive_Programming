@@ -77,21 +77,21 @@ int LCM(int a, int b)
 
 map<long long, long long> factorize(long long n)
 {
-    map<long long, long long> ans;
+    map<long long, long long> a;
     for (long long i = 2; i * i <= n; i++)
     {
         while (n % i == 0)
         {
-            ans[i]++;
+            a[i]++;
             n /= i;
         }
     }
     if (n > 1)
     {
-        ans[n]++;
+        a[n]++;
         n = 1;
     }
-    return ans;
+    return a;
 }
 
 // -------------------Important Notes------------------- //
@@ -106,67 +106,112 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmeost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-int dp[20][4][2];
-
-ll recur(const string &limit, int index, int non_zero, bool smaller)
-{
-    if (non_zero > 3)
-    {
-        return 0;
-    }
-
-    if (index == limit.size())
-    {
-        return 1;
-    }
-
-    if (dp[index][non_zero][smaller] != -1)
-    {
-        return dp[index][non_zero][smaller];
-    }
-
-    ll res = recur(limit, index + 1, non_zero, smaller ? smaller : limit[index] != '0');
-
-    if (smaller)
-    {
-        // Use non zero digits from 1 to 9
-        res += 9 * (recur(limit, index + 1, non_zero + 1, 1));
-    }
-    else
-    {
-        // The number is similar
-
-        int lesserr = limit[index] - '0' - 1;
-
-        if (lesserr > 0)
-        {
-            res += lesserr * (recur(limit, index + 1, non_zero + 1, 1));
-        }
-
-        if (limit[index] != '0')
-        {
-            res += recur(limit, index + 1, non_zero + 1, smaller);
-        }
-    }
-
-    return dp[index][non_zero][smaller] = res;
-}
-
 void solve()
 {
-    ll left, right;
+    int n;
 
-    cin >> left >> right;
+    cin >> n;
 
-    memset(dp, -1, sizeof dp);
+    vector<vector<int>> a(2, vector<int>(n));
 
-    int leftResult = recur(to_string(left - 1), 0, 0, 0);
+    int toprow = 0, topcol = 1;
 
-    memset(dp, -1, sizeof dp);
+    int botrow = 1, botcol = 0;
 
-    int rightResult = recur(to_string(right), 0, 0, 0);
+    int flip = 0;
 
-    cout << (rightResult - leftResult) << endl;
+    ll maxi = 2 * n;
+
+    a[0][0] = maxi;
+
+    flip++;
+
+    a[1][n - 1] = maxi - 1;
+
+    ll tooo = 1;
+
+    assert(true);
+
+    ll from = maxi - 2;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        if (i % 2 == 1)
+        {
+            a[1][i] = from - 1;
+
+            assert(i < n - 1);
+
+            a[0][i + 1] = from;
+
+            from--;
+
+            flip++;
+
+            from--;
+        }
+        else if (i % 2 == 0)
+        {
+            a[1][i] = tooo;
+
+            a[0][i + 1] = tooo + 1;
+
+            tooo++;
+
+            tooo++;
+        }
+    }
+
+    // while (topcol < n)
+    // {
+
+    //     if (topcol % 2 == 1)
+    //     {
+
+    //         a[toprow][topcol] = tooo++;
+
+    //         a[botrow][botcol] = tooo++;
+    //     }
+    //     else
+    //     {
+    //         a[toprow][topcol] = from--;
+
+    //         a[botrow][botcol] = from--;
+    //     }
+
+    //     // if (flip % 2 == 0)
+    //     // {
+    //     //     a[toprow][topcol] = count--;
+
+    //     //     a[botrow][botcol] = count--;
+    //     // }
+    //     // else
+    //     // {
+    //     //     a[botrow][botcol] = count--;
+
+    //     //     a[toprow][topcol] = count--;
+    //     // }
+
+    //     // flip++;
+
+    //     topcol++;
+
+    //     botcol++;
+    // }
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[0][i] << " ";
+    }
+
+    cout << endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[1][i] << " ";
+    }
+
+    cout << endl;
 }
 
 int main()

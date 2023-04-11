@@ -38,7 +38,7 @@ template <typename typC, typename typD>
 ostream &operator<<(ostream &cout, const vector<pair<typC, typD>> &a)
 {
     for (auto &x : a)
-        cout << x << '\n';
+        cout << x << endl;
     return cout;
 }
 template <typename typC>
@@ -106,67 +106,178 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmeost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-int dp[20][4][2];
-
-ll recur(const string &limit, int index, int non_zero, bool smaller)
+void solve()
 {
-    if (non_zero > 3)
+    ll n;
+    cin >> n;
+
+    vector<ll> a(n);
+
+    cin >> a;
+
+    if (n == 2)
     {
-        return 0;
+        cout << (is_sorted(a.begin(), a.end()) ? "YES" : "NO") << endl;
+
+        return;
     }
 
-    if (index == limit.size())
+    if (is_sorted(a.begin(), a.end()))
     {
-        return 1;
+        cout << "YES" << endl;
+
+        return;
     }
 
-    if (dp[index][non_zero][smaller] != -1)
+    // cout << "This is a : " << endl;
+
+    // cout << a << endl;
+
+    vector<ll> b = a;
+
+    ll sum = 0;
+
+    for (int i = 1; i < n - 1; i++)
     {
-        return dp[index][non_zero][smaller];
+
+        if (b[i] > b[i - 1])
+        {
+            ll diff = b[i] - b[i + 1];
+
+            b[i] += diff;
+            b[i + 1] += diff;
+
+            // sum += diff;
+        }
     }
 
-    ll res = recur(limit, index + 1, non_zero, smaller ? smaller : limit[index] != '0');
-
-    if (smaller)
+    if (b[n - 1] >= b[n - 2])
     {
-        // Use non zero digits from 1 to 9
-        res += 9 * (recur(limit, index + 1, non_zero + 1, 1));
+        cout << "YES" << endl;
+
+        return;
     }
     else
     {
-        // The number is similar
+        ll temp = 0;
 
-        int lesserr = limit[index] - '0' - 1;
-
-        if (lesserr > 0)
+        for (int i = n - 2; i > 0; i--)
         {
-            res += lesserr * (recur(limit, index + 1, non_zero + 1, 1));
+            if (b[i] > b[i + 1])
+            {
+                ll diff = b[i] - b[i + 1];
+
+                b[i] -= diff;
+
+                b[i - 1] -= diff;
+            }
         }
 
-        if (limit[index] != '0')
+        if (b[0] > b[1])
         {
-            res += recur(limit, index + 1, non_zero + 1, smaller);
+            cout << "NO" << endl;
+        }
+        else
+        {
+            cout << "YES" << endl;
         }
     }
 
-    return dp[index][non_zero][smaller] = res;
-}
+    // ll dif = b[n - 2] - b[n - 1];
 
-void solve()
-{
-    ll left, right;
+    // b[n - 2] -= dif;
+    // b[n - 3] -= dif;
 
-    cin >> left >> right;
+    // b[n - 1] += (ll)(1e15);
+    // b[n - 2] += (ll)(1e15);
 
-    memset(dp, -1, sizeof dp);
+    // if (is_sorted(b.begin(), b.end()))
+    // {
+    //     cout << "YES" << endl;
 
-    int leftResult = recur(to_string(left - 1), 0, 0, 0);
+    //     return;
+    // }
 
-    memset(dp, -1, sizeof dp);
+    // cout << "NO" << endl;
+    // int due = 0;
 
-    int rightResult = recur(to_string(right), 0, 0, 0);
+    // vector<ll> a(n);
 
-    cout << (rightResult - leftResult) << endl;
+    // cin >> a;
+
+    // ll flip = 1;
+
+    // for (int i = 0; i < n - 1; i++)
+    // {
+    //     if (a[i] > a[i + 1])
+    //     {
+    //         flip = 0;
+
+    //         due++;
+
+    //         break;
+    //     }
+    // }
+
+    // if (flip)
+    // {
+    //     cout << "YES" << endl;
+    //     return;
+    // }
+
+    // bool flag = 0;
+
+    // int x = a[n - 1];
+
+    // for (int i = n - 1; i > 0; i--)
+    // {
+    //     if (i == n - 1)
+    //     {
+    //         flag = 1;
+    //         due--;
+    //         continue;
+    //     }
+
+    //     if (a[i] >= x)
+    //     {
+    //         ll from = a[i] - x;
+
+    //         due--;
+    //         a[i] -= from;
+
+    //         assert(i > 0);
+
+    //         a[i - 1] -= from;
+    //     }
+    //     else
+    //     {
+    //         ll tem = x - a[i];
+
+    //         a[i] += tem;
+
+    //         due++;
+
+    //         a[i - 1] += tem;
+    //     }
+    // }
+
+    // if (a[0] <= a[n - 1])
+    // {
+    //     cout << "YES" << endl;
+
+    //     return;
+    // }
+    // else
+    // {
+    //     if (n % 2 == 0)
+    //     {
+    //         cout << "NO" << endl;
+    //     }
+    //     else
+    //     {
+    //         cout << "YES" << endl;
+    //     }
+    // }
 }
 
 int main()
@@ -179,6 +290,12 @@ int main()
     ll t = 1;
 
     cin >> t;
+
+    cout << "I stopped here ! " << endl;
+
+    cout << "I didnt come here ! " << endl;
+
+    // cin >> t;
 
     for (ll i = 0; i < t; i++)
     {

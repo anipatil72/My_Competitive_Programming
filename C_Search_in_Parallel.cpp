@@ -106,67 +106,41 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmeost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-int dp[20][4][2];
-
-ll recur(const string &limit, int index, int non_zero, bool smaller)
-{
-    if (non_zero > 3)
-    {
-        return 0;
-    }
-
-    if (index == limit.size())
-    {
-        return 1;
-    }
-
-    if (dp[index][non_zero][smaller] != -1)
-    {
-        return dp[index][non_zero][smaller];
-    }
-
-    ll res = recur(limit, index + 1, non_zero, smaller ? smaller : limit[index] != '0');
-
-    if (smaller)
-    {
-        // Use non zero digits from 1 to 9
-        res += 9 * (recur(limit, index + 1, non_zero + 1, 1));
-    }
-    else
-    {
-        // The number is similar
-
-        int lesserr = limit[index] - '0' - 1;
-
-        if (lesserr > 0)
-        {
-            res += lesserr * (recur(limit, index + 1, non_zero + 1, 1));
-        }
-
-        if (limit[index] != '0')
-        {
-            res += recur(limit, index + 1, non_zero + 1, smaller);
-        }
-    }
-
-    return dp[index][non_zero][smaller] = res;
-}
-
 void solve()
 {
-    ll left, right;
+    int n, fir, sec;
 
-    cin >> left >> right;
+    cin >> n >> fir >> sec;
 
-    memset(dp, -1, sizeof dp);
+    vector<pair<int, int>> req(n);
 
-    int leftResult = recur(to_string(left - 1), 0, 0, 0);
+    for (int i = 0; i < n; i++)
+    {
+        int c;
 
-    memset(dp, -1, sizeof dp);
+        cin >> c;
 
-    int rightResult = recur(to_string(right), 0, 0, 0);
+        req[i] = {c, i};
+    }
 
-    cout << (rightResult - leftResult) << endl;
+    sort(req.rbegin(), req.rend());
+
+    vector<int> firrobot, secrobot;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (firrobot.size() * 1LL * fir + fir < secrobot.size() * 1LL * sec + sec)
+        {
+            firrobot.push_back(req[i].second + 1);
+        }
+        else
+        {
+            secrobot.push_back(req[i].second + 1);
+        }
+    }
+
+    cout << firrobot.size() << " " << firrobot << endl;
+    cout << secrobot.size() << " " << secrobot << endl;
 }
 
 int main()

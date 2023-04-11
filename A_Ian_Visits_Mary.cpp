@@ -106,67 +106,17 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmeost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-int dp[20][4][2];
-
-ll recur(const string &limit, int index, int non_zero, bool smaller)
-{
-    if (non_zero > 3)
-    {
-        return 0;
-    }
-
-    if (index == limit.size())
-    {
-        return 1;
-    }
-
-    if (dp[index][non_zero][smaller] != -1)
-    {
-        return dp[index][non_zero][smaller];
-    }
-
-    ll res = recur(limit, index + 1, non_zero, smaller ? smaller : limit[index] != '0');
-
-    if (smaller)
-    {
-        // Use non zero digits from 1 to 9
-        res += 9 * (recur(limit, index + 1, non_zero + 1, 1));
-    }
-    else
-    {
-        // The number is similar
-
-        int lesserr = limit[index] - '0' - 1;
-
-        if (lesserr > 0)
-        {
-            res += lesserr * (recur(limit, index + 1, non_zero + 1, 1));
-        }
-
-        if (limit[index] != '0')
-        {
-            res += recur(limit, index + 1, non_zero + 1, smaller);
-        }
-    }
-
-    return dp[index][non_zero][smaller] = res;
-}
-
 void solve()
 {
-    ll left, right;
+    ll x, y;
 
-    cin >> left >> right;
+    cin >> x >> y;
 
-    memset(dp, -1, sizeof dp);
+    cout << 2 << endl;
 
-    int leftResult = recur(to_string(left - 1), 0, 0, 0);
+    cout << 1 << " " << y - 1 << endl;
 
-    memset(dp, -1, sizeof dp);
-
-    int rightResult = recur(to_string(right), 0, 0, 0);
-
-    cout << (rightResult - leftResult) << endl;
+    cout << x << " " << y << endl;
 }
 
 int main()
