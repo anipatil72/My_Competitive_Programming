@@ -30,6 +30,8 @@ int recur(int index, int sum, vector<int> &num, vector<vector<int>> &dp)
 
     int take = (int)1e9;
 
+    // I called the same code
+
     if (sum >= num[index])
     {
         take = 1 + recur(index, sum - num[index], num, dp);
@@ -63,14 +65,43 @@ int minimumElementsTab(vector<int> &num, int x)
 
     int ans = 0;
 
-        // int ans = recur(n - 1, x, num, dp);
+    for (int i = 0; i <= x; i++)
+    {
+        if (i % num[0] == 0)
+        {
+            dp[0][i] = i / num[0];
+        }
+        else
+        {
+            dp[0][i] = (int)(1e9);
+        }
+    }
+
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = 0; j <= x; j++)
+        {
+            int nottake = dp[i - 1][j];
+
+            int take = (int)1e9;
+
+            if (j >= num[i])
+            {
+                take = 1 + dp[i][j - num[i]];
+            }
+
+            dp[i][j] = max(take, nottake);
+        }
+    }
+
+    // int ans = recur(n - 1, x, num, dp);
 
     // if (ans == (int)1e8 || (ans == (int)1e9))
     // {
     //     return -1;
     // }
 
-    return ans;
+    return (dp[n - 1][x] >= (int)1e9 ? -1 : dp[n - 1][x]);
 }
 
 int main()
