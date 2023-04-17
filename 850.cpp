@@ -13,6 +13,16 @@ int recur(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &dp)
     int n = grid.size();
 
     int m = grid[0].size();
+
+    if (row < 0 || col < 0)
+    {
+        return 0;
+    }
+
+    if (dp[row][col] != -1)
+    {
+        return dp[row][col];
+    }
 }
 
 int longestIncreasingPath(vector<vector<int>> &matrix)
