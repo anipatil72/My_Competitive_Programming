@@ -46,6 +46,51 @@ int recur(string &a, string &b, int ai, int bi, vector<vector<int>> &dp)
     return dp[ai][bi] = max(take, nontake);
 }
 
+int LongestCommonSubsequence(string &a, string &b)
+{
+    int na = a.length();
+
+    int nb = b.length();
+
+    if (na == 0 || nb == 0)
+        return 0;
+
+    vector<vector<int>> dp(na, vector<int>(nb, 0));
+
+    for (int i = 0; i < nb; i++)
+    {
+        if (a[0] == b[i])
+        {
+            dp[0][i] = 1;
+        }
+    }
+
+    for (int i = 0; i < na; i++)
+    {
+        if (b[0] == a[i])
+        {
+            dp[i][0] = 1;
+        }
+    }
+
+    for (int i = 1; i < na; i++)
+    {
+        for (int j = 1; j < nb; j++)
+        {
+            if (a[i] == b[j])
+            {
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            }
+            else
+            {
+                dp[i][j] = max({dp[i - 1][j], dp[i][j - 1]});
+            }
+        }
+    }
+
+    return dp[na - 1][nb - 1];
+}
+
 int LongestCS(string a, string b)
 {
     int na = a.length();
@@ -59,6 +104,11 @@ int LongestCS(string a, string b)
 
 int main()
 {
+
+    string a = "a";
+    string b = "";
+
+    cout << LongestCommonSubsequence(a, b) << endl;
 
     return 0;
 }
