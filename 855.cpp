@@ -48,6 +48,8 @@ bool wifiRange(int N, string s, int X)
 int main()
 {
 
+    cout << "Maja aa gya!" << '\n';
+
     return 0;
 }
 
