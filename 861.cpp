@@ -164,9 +164,9 @@ int editDistance(string a, string b)
 int main()
 {
 
-    string a = "newbie";
+    string a = "expert";
 
-    string b = "expert";
+    string b = "master";
 
     cout << editDistanceTabulation(a, b) << endl;
 
