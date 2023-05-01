@@ -1,5 +1,6 @@
 {
   "files.associations": {
+    "*.ejs": "html",
     "ostream": "cpp",
     "iostream": "cpp",
     "string": "cpp",
@@ -96,7 +97,8 @@
     "xstddef": "cpp",
     "xtr1common": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "cassert": "cpp"
   },
   "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
   "C_Cpp.intelliSenseEngineFallback": "Disabled",
