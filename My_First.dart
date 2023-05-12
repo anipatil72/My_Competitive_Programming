@@ -8,7 +8,17 @@ void main(){
 
     ans+=" Design of Steel Structures!";
 
+    ans+=" Contruction Technology and Management!";
+
+    ans+=" Mathematical Concepts and Applications in Civil Engineering!";
+
+    // print(INT_MAX);
+
+    
+
     print(ans);
+
+    
 
     
     
