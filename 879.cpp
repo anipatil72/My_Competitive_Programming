@@ -14,8 +14,6 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 long long mostPoints(vector<vector<int>> &questions)
 {
     int n = questions.size();
-
-    
 }
 
 int main()
