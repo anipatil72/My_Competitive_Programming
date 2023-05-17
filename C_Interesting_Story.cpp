@@ -184,197 +184,47 @@ bool myCompfore(pair<string, vector<int>> &a, pair<string, vector<int>> &b)
 
 void solve()
 {
-    int n;
-
-    cin >> n;
-
-    vector<string> a(n);
-
-    for (int i = 0; i < n; i++)
+    int N;
+    cin >> N;
+    vector<string> A(N);
+    for (int i = 0; i < N; i++)
     {
-        cin >> a[i];
-    }
-
-    vector<pair<string, vector<int>>> ca(n);
-
-    for (int i = 0; i < n; i++)
-    {
-        string tem = a[i];
-
-        vector<int> freq(5, 0);
-
-        for (int j = 0; j < tem.length(); j++)
-        {
-            freq[tem[j] - 'a']++;
-        }
-
-        ca[i] = {tem, freq};
+        cin >> A[i];
     }
 
     int ans = 0;
 
-    sort(ca.begin(), ca.end(), myCompfora);
-
-    // dbg(ca);
-
-    int temp = 0;
-
-    int tot = 0;
-
-    int tota = 0;
-
-    for (int i = 0; i < n; i++)
+    for (char c = 'a'; c <= 'e'; c++)
     {
-
-        tot += ca[i].first.length();
-
-        tota += ca[i].second[0];
-
-        if ((tota > (tot - tota)))
+        vector<int> B(N, 0);
+        for (int i = 0; i < N; i++)
         {
-            temp++;
-
-            ans = max(ans, temp);
-            // dbg(temp, tot, tota, ans);
+            for (char d : A[i])
+            {
+                B[i] += c == d ? 1 : -1;
+            }
         }
-        else
+        sort(B.begin(), B.end());
+
+        int cnt = 0, all = 0;
+
+        for (int i = N; i--;)
         {
-
-            tot -= ca[i].first.length();
-
-            tota -= ca[i].second[0];
-
-            // break;
+            all += B[i];
+            if (all > 0)
+            {
+                cnt++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        if (ans < cnt)
+        {
+            ans = cnt;
         }
     }
-
-    // for b
-
-    sort(ca.begin(), ca.end(), myCompforb);
-    // dbg(ca);
-
-    temp = 0, tot = 0, tota = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-
-        tot += ca[i].first.length();
-
-        tota += ca[i].second[1];
-
-        if ((tota > (tot - tota)))
-        {
-            temp++;
-
-            ans = max(ans, temp);
-            // dbg(temp, tot, tota, ans);
-        }
-        else
-        {
-
-            tot -= ca[i].first.length();
-
-            tota -= ca[i].second[1];
-
-            // break;
-        }
-    }
-
-    // for c
-
-    sort(ca.begin(), ca.end(), myCompforc);
-
-    // dbg(ca);
-
-    temp = 0, tot = 0, tota = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-
-        tot += ca[i].first.length();
-
-        tota += ca[i].second[2];
-
-        if ((tota > (tot - tota)))
-        {
-            temp++;
-
-            ans = max(ans, temp);
-            // dbg(temp, tot, tota, ans);
-        }
-        else
-        {
-
-            tot -= ca[i].first.length();
-
-            tota -= ca[i].second[2];
-            // break;
-        }
-    }
-
-    // for d
-
-    sort(ca.begin(), ca.end(), myCompford);
-    // dbg(ca);
-
-    temp = 0, tot = 0, tota = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-
-        tot += ca[i].first.length();
-
-        tota += ca[i].second[3];
-
-        if ((tota > (tot - tota)))
-        {
-            temp++;
-
-            ans = max(ans, temp);
-            // dbg(temp, tot, tota, ans);
-        }
-        else
-        {
-
-            tot -= ca[i].first.length();
-
-            tota -= ca[i].second[3];
-            // break;
-        }
-    }
-
-    // for e
-
-    sort(ca.begin(), ca.end(), myCompfore);
-    // dbg(ca);
-
-    temp = 0, tot = 0, tota = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-
-        tot += ca[i].first.length();
-        tota += ca[i].second[4];
-
-        ans = max(ans, temp);
-
-        if (tot == 0 || (tota > (tot - tota)))
-        {
-            temp++;
-
-            // tota += ca[i].second[4];
-            // dbg(temp, tot, tota, ans);
-        }
-        else
-        {
-
-            tot -= ca[i].first.length();
-            tota -= ca[i].second[4];
-            // break;
-        }
-    }
-
-    // cout << "The ans is : ";
     cout << ans << endl;
 }
 
