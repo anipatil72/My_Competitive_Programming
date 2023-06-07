@@ -79,9 +79,9 @@ int LCM(int a, int b)
 
 // returns map containing factor and multiplicity, Eg: 60 = {{2,2},{3,1},{5,1}}
 
-map<long long, long long> factorize(long long n)
+unordered_map<long long, long long> factorize(long long n)
 {
-    map<long long, long long> ans;
+    unordered_map<long long, long long> ans;
     for (long long i = 2; i * i <= n; i++)
     {
         while (n % i == 0)
@@ -98,42 +98,6 @@ map<long long, long long> factorize(long long n)
     return ans;
 }
 
-// // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0200r0.html
-// template <class Fun>
-// class y_combinator_result
-// {
-//     Fun fun_;
-
-// public:
-//     template <class T>
-//     explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
-//     template <class... Args>
-//     decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
-// };
-// template <class Fun>
-// decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
-
-// template <typename A, typename B>
-// ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << "," << p.second << ')'; }
-// template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
-// ostream &operator<<(ostream &os, const T_container &v)
-// {
-//     os << '{';
-//     string sep;
-//     for (const T &x : v)
-//         os << sep << x, sep = ", ";
-//     return os << '}';
-// }
-
-// void dbg_out() { cerr << endl; }
-// template <typename Head, typename... Tail>
-// void dbg_out(Head H, Tail... T)
-// {
-//     cerr << ' ' << H;
-//     dbg_out(T...);
-// }
-// #define dbg(...) cerr << '[' << __FILE__ << ':' << __LINE__ << "] (" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-
 // -------------------Important Notes------------------- //
 // **For Interactive Problems remember to remove multi test cases condition** //
 // (int)log2(x) + 1  -> to calculate number of bits of a number
@@ -146,78 +110,36 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmeost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-bool check(vector<int> &exis, vector<int> &now)
-{
-    int a = 0, b = 0;
-
-    for (int i = 0; i < 5; i++)
-    {
-        if (exis[i] < now[i])
-        {
-            a++;
-        }
-        else
-        {
-            b++;
-        }
-    }
-
-    return a > b;
-}
-
 void solve()
 {
     int n;
 
     cin >> n;
 
-    vector<vector<int>> mars;
+    vector<int> a(n);
+
+    cin >> a;
+
+    vector<int> freq(100001);
 
     for (int i = 0; i < n; i++)
     {
-        vector<int> tem(5);
+        unordered_map<long long, long long> fac = factorize(1LL * a[i]);
 
-        cin >> tem;
-
-        mars.push_back(tem);
+        for (auto x : fac)
+        {
+            freq[x.first]++;
+        }
     }
 
-    vector<int> exis = mars[0];
+    int ans = 1;
 
-    int index = 0;
-
-    for (int i = 1; i < n; i++)
+    for (int i = 0; i < 100001; i++)
     {
-        if (check(exis, mars[i]))
-        {
-        }
-        else
-        {
-            exis = mars[i];
-
-            index = i;
-        }
+        ans = max(ans, freq[i]);
     }
 
-    for (int i = 0; i < n; i++)
-    {
-        if (i != index)
-        {
-            if (check(exis, mars[i]))
-            {
-            }
-            else
-            {
-                cout << "-1" << endl;
-
-                return;
-            }
-        }
-    }
-
-    // dbg(mars[index]);
-
-    cout << index + 1 << endl;
+    cout << ans << endl;
 }
 
 int main()
@@ -229,7 +151,7 @@ int main()
 
     ll t = 1;
 
-    cin >> t;
+    // cin >> t;
 
     for (ll i = 0; i < t; i++)
     {
