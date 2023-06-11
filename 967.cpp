@@ -47,6 +47,8 @@ void dbg_out(Head H, Tail... T)
 }
 #define dbg(...) cerr << '[' << __FILE__ << ':' << __LINE__ << "] (" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 
+// Leetcode HARD to do
+
 int minChanges(vector<int> &nums, int k)
 {
 
