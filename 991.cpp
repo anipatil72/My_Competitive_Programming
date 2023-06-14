@@ -125,127 +125,65 @@ public:
     }
 };
 
-vector<bool> friendRequests(int n, vector<vector<int>> &restrictions, vector<vector<int>> &requests)
+string smallestStringWithSwaps(string s, vector<vector<int>> &pairs)
 {
-    // vector<int> baap(n, -1);
+    int n = s.length();
 
-    int m = requests.size();
+    int m = pairs.size();
 
-    vector<bool> ans(m, 0);
+    string ans = "";
 
-    DSU UF(n);
+    DSU forest(n);
 
     for (int i = 0; i < m; i++)
     {
-        DSU temp = UF;
-        temp.Union(requests[i][0], requests[i][1]);
-        bool flag = true;
-        for (vector<int> &v : restrictions)
-        {
-            if (temp.find(v[0]) == temp.find(v[1]))
-            {
-                flag = false;
-                break;
-            }
-        }
-
-        if (flag)
-        {
-            ans[i] = true;
-            UF.Union(requests[i][0], requests[i][1]);
-        }
+        forest.Union(pairs[i][0], pairs[i][1]);
     }
 
-    return ans;
-
-    // // DSU forest(n);
-
-    // set<pair<int, int>> s;
-
-    // unordered_set<int> seniors;
-
-    // int len = restrictions.size();
-
-    // for (int i = 0; i < len; i++)
-    // {
-    //     if (restrictions[i][0] < restrictions[i][1])
-    //     {
-    //         s.insert({restrictions[i][0], restrictions[i][1]});
-    //     }
-    //     else
-    //     {
-    //         s.insert({restrictions[i][1], restrictions[i][0]});
-    //     }
-
-    //     baap[restrictions[i][0]] = -2;
-    //     baap[restrictions[i][1]] = -2;
-    // }
-
-    // // dbg(s);
-
-    // int ven = requests.size();
-
-    // vector<bool> ans;
-
-    // for (int i = 0; i < ven; i++)
-    // {
-    //     // dbg(forest.parent);
-    //     int x = baap[requests[i][0]];
-    //     int y = baap[requests[i][1]];
-    //     // dbg(forest.parent);
-
-    //     if (x != y)
-    //     {
-    //         if (x < y)
-    //         {
-    //             if (s.find({x, y}) != s.end())
-    //             {
-    //                 ans.push_back(false);
-    //             }
-    //             else
-    //             {
-    //                 // forest.Union(x, y);
-    //                 // dbg(forest.parent);
-    //                 ans.push_back(true);
-    //             }
-    //         }
-    //         else
-    //         {
-    //             if (s.find({y, x}) != s.end())
-    //             {
-    //                 ans.push_back(false);
-    //             }
-    //             else
-    //             {
-    //                 // forest.Union(x, y);
-    //                 // dbg(forest.parent);
-    //                 ans.push_back(true);
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         ans.push_back(true);
-    //     }
-    // }
+    for (int i = 0; i < n; i++)
+    {
+        int c = forest.find(i);
+    }
 
     // dbg(forest.parent);
 
-    // return ans;
+    unordered_map<int, priority_queue<char, vector<char>, greater<char>>> des;
+    // unordered_map<int, int> maha;
+
+    for (int i = 0; i < n; i++)
+    {
+        des[forest.parent[i]].push(s[i]);
+
+        // maha[forest.parent[i]] = 0;
+    }
+
+    // dbg(des);
+
+    for (int i = 0; i < n; i++)
+    {
+        ans += des[forest.parent[i]].top();
+
+        des[forest.parent[i]].pop();
+
+        // maha[forest.parent[i]]++;
+    }
+
+    return ans;
 }
+
+//"fqtvkfkt"
+// [[2,4],[5,7],[1,0],[0,0],[4,7],[0,3],[4,1],[1,3]]
 
 int main()
 {
 
-    vector<vector<int>> restrictions = {{0, 1}, {1, 2}, {2, 3}};
+    string test = "fqtvkfkt";
 
-    vector<vector<int>> requests = {{0, 4}, {1, 2}, {3, 1}, {3, 4}};
+    vector<vector<int>> res = {{2, 4}, {5, 7}, {1, 0}, {0, 0}, {4, 7}, {0, 3}, {4, 1}, {1, 3}};
 
-    int n = 5;
+    string ans = smallestStringWithSwaps(test, res);
 
-    vector<bool> des = friendRequests(n, restrictions, requests);
-
-    dbg(des);
+    cout << "This is ans : " << ans << endl;
 
     return 0;
 }
