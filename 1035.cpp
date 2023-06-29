@@ -67,14 +67,50 @@ int matrixChainMultiplication(int n, int arr[])
     // return ans;
 }
 
+int matrixChainTabulation(vector<int> &arr)
+{
+    int n = arr.size();
+
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+
+    for (int i = 0; i < n; i++)
+    {
+        dp[i][i] = 0;
+
+        if (i + 1 < n)
+        {
+            dp[i][i + 1] = 0;
+        }
+    }
+
+    for (int i = n - 1; i >= 0; i--)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            int tem = 1e9;
+
+            for (int k = i + 1; k < j; k++)
+            {
+                int tes = arr[i] * arr[k] * arr[j] + dp[i][k] + dp[k][j];
+
+                tem = min(tem, tes);
+            }
+
+            dp[i][j] = (tem == 1e9 ? 0 : tem);
+        }
+    }
+
+    return dp[0][n - 1];
+}
+
 int main()
 {
 
-    int arr[] = {10, 30, 5, 60};
+    vector<int> arr = {10, 30, 5, 60};
 
-    int n = sizeof(arr) / (sizeof(arr[0]));
+    int n = arr.size();
 
-    cout << matrixChainMultiplication(n, arr);
+    cout << matrixChainTabulation(arr);
 
     return 0;
 }
