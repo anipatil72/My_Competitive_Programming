@@ -123,9 +123,37 @@ void solve(ll tt, ll index)
 
     string ans = "";
 
+    // a = number of 00, b = number of 01 and 10 and c = number of 11
+
     if (a == 0 && b == 0 && c > 0)
     {
         for (int i = 0; i < c + 1; i++)
+        {
+            ans += '0';
+        }
+    }
+    else if (b % 2 == 0 && c > 0)
+    {
+        ans += '0';
+
+        for (int i = 0; i < a + 1; i++)
+        {
+            ans += '1';
+        }
+
+        for (int i = 0; i < b - 1; i++)
+        {
+            if (i & 1)
+            {
+                ans += '1';
+            }
+            else
+            {
+                ans += '0';
+            }
+        }
+
+        for (int i = 0; i < c; i++)
         {
             ans += '0';
         }
