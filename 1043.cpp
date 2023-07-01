@@ -24,81 +24,62 @@ void print_2D(vector<T_vector> &v)
     }
 }
 
+int recur(int index, int jindex, vector<int> &a, vector<vector<int>> &dp)
+{
+    if (index > jindex)
+    {
+        return 0;
+    }
+
+    if (dp[index][jindex] != -1)
+    {
+        return dp[index][jindex];
+    }
+
+    int ans = 0;
+
+    for (int i = index; i <= jindex; i++)
+    {
+        int des = a[index - 1] * a[i] * a[jindex + 1] + recur(index, i - 1, a, dp) + recur(i + 1, jindex, a, dp);
+
+        ans = max(ans, des);
+    }
+
+    return dp[index][jindex] = ans;
+}
+
 int maxCoins(vector<int> &a)
 {
     int n = a.size();
 
-    // a.push_back(1);
+    a.push_back(1);
 
-    // a.insert(a.begin(), 1);
+    a.insert(a.begin(), 1);
 
-    vector<vector<int>> dp(n, vector<int>(n, 0));
+    vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0));
 
-    // Balllons will go from 1 to n ;
-
-    for (int i = 0; i < n; i++)
+    for (int i = n; i >= 1; i--)
     {
-        dp[i][i] = 0;
 
-        int left = 1, right = 1, center = a[i];
-
-        if (i > 0)
-        {
-            left = a[i - 1];
-        }
-
-        if (i < n - 1)
-        {
-            right = a[i + 1];
-        }
-
-        dp[i][i] = left * 1LL * right * center;
-    }
-
-    for (int i = n - 1; i >= 0; i--)
-    {
-        for (int j = i; j < n; j++)
+        for (int j = i; j <= n; j++)
         {
 
-            if (i == j)
+            int ans = 0;
+
+            for (int k = i; k <= j; k++)
             {
+                int des = a[i - 1] * a[k] * a[j + 1] + dp[i][k - 1] + dp[k + 1][j];
+
+                ans = max(ans, des);
             }
-            else
-            {
-                long long tem = 0;
 
-                for (int k = i; k <= j; k++)
-                {
-
-                    long long des = 0, left = 1, right = 1, center = a[k];
-
-                    if (k > i)
-                    {
-                        des += dp[i][k - 1];
-
-                        left = a[k - 1];
-                    }
-
-                    if (k < j)
-                    {
-                        des += dp[k + 1][j];
-
-                        right = a[k + 1];
-                    }
-
-                    des += (left * right * center);
-
-                    tem = max(des, tem);
-                }
-
-                dp[i][j] = tem;
-            }
+            dp[i][j] = ans;
         }
     }
 
-    print_2D(dp);
+    return dp[1][n];
 
-    return dp[0][n - 1];
+    // return recur(1, n, a, dp);
 }
 
 int main()
