@@ -11,43 +11,32 @@ using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 // typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
 
-int maximumRequests(int n, vector<vector<int>> &requests)
+int singleNumber(vector<int> &nums)
 {
-    int q = requests.size();
+    int n = nums.size();
+
+    vector<int> sum(32, 0);
+
+    int sign = 0;
+
+    for (int j = 0; j < n; j++)
+    {
+        for (int i = 0; i < 32; i++)
+        {
+            if ((nums[j] & (1 << (i))))
+            {
+                sum[i]++;
+            }
+        }
+    }
 
     int ans = 0;
 
-    int fin = (1 << (q));
-
-    for (int i = 0; i < fin; i++)
+    for (int i = 0; i < 32; i++)
     {
-        vector<int> sum(n, 0);
+        int des = sum[i] % 3;
 
-        for (int j = 0; j < q; j++)
-        {
-            if (((1 << (j)) & i) > 0)
-            {
-                sum[requests[j][0]]--;
-                sum[requests[j][1]]++;
-            }
-        }
-
-        bool flag = true;
-
-        for (int j = 0; j < n; j++)
-        {
-            if (sum[j] != 0)
-            {
-                flag = false;
-
-                break;
-            }
-        }
-
-        if (flag)
-        {
-            ans = max(ans, __builtin_popcount(i));
-        }
+        ans |= (des << i);
     }
 
     return ans;

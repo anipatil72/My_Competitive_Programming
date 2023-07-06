@@ -11,46 +11,36 @@ using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 // typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
 
-int maximumRequests(int n, vector<vector<int>> &requests)
+int minimizeXor(int num1, int num2)
 {
-    int q = requests.size();
+    int tot = __builtin_popcount(num1);
 
-    int ans = 0;
+    int x = 0, count = 0;
 
-    int fin = (1 << (q));
-
-    for (int i = 0; i < fin; i++)
+    for (int i = 31; i >= 0 && count < tot; i--)
     {
-        vector<int> sum(n, 0);
-
-        for (int j = 0; j < q; j++)
+        if (num2 & (1 << i))
         {
-            if (((1 << (j)) & i) > 0)
-            {
-                sum[requests[j][0]]--;
-                sum[requests[j][1]]++;
-            }
-        }
+            x |= (1 << i);
 
-        bool flag = true;
-
-        for (int j = 0; j < n; j++)
-        {
-            if (sum[j] != 0)
-            {
-                flag = false;
-
-                break;
-            }
-        }
-
-        if (flag)
-        {
-            ans = max(ans, __builtin_popcount(i));
+            count++;
         }
     }
 
-    return ans;
+    for (int i = 0; i < 32 && count < tot; i++)
+    {
+        if (num2 & (1 << i))
+        {
+        }
+        else
+        {
+            x |= (1 << i);
+
+            count++;
+        }
+    }
+
+    return x;
 }
 
 int main()
