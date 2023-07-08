@@ -47,7 +47,7 @@ void dbg_out(Head H, Tail... T)
 }
 #define dbg(...) cerr << '[' << __FILE__ << ':' << __LINE__ << "] (" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 
-int maxConsecutiveAnswers(string s, int k)
+int maxConsecutiveAnswers(vector<int> &s, int k)
 {
     int n = s.size();
 
@@ -61,7 +61,7 @@ int maxConsecutiveAnswers(string s, int k)
     {
         int desone = one, deszero = zero;
 
-        if (s[right] == 'T')
+        if (s[right] == 1)
         {
             desone++;
         }
@@ -70,10 +70,10 @@ int maxConsecutiveAnswers(string s, int k)
             deszero++;
         }
 
-        if (min(desone, deszero) <= k)
+        if (deszero <= k)
         {
             ans = max(ans, right - left + 1);
-            if (s[right] == 'T')
+            if (s[right] == 1)
             {
                 one++;
             }
@@ -86,10 +86,10 @@ int maxConsecutiveAnswers(string s, int k)
 
             right++;
         }
-        else // if (left < right)
+        else if (left < right)
         {
 
-            if (s[left] == 'T')
+            if (s[left] == 1)
             {
                 one--;
             }
@@ -102,10 +102,27 @@ int maxConsecutiveAnswers(string s, int k)
 
             // dbg(left, right, one, zero);
         }
+        else
+        {
+
+            // if (s[left] == 1)
+            // {
+            //     one--;
+            // }
+            // else
+            // {
+            //     zero--;
+            // }
+
+            left++;
+
+            right++;
+
+            // dbg(left, right, one, zero);
+        }
 
         // // cout << "This is left : " << left << " and this is right : " << right << endl;
 
-        // dbg(left, right, one, zero);
         // else
         // {
         //     ans = max(ans, right - left);
@@ -143,17 +160,19 @@ int maxConsecutiveAnswers(string s, int k)
     // }
 }
 
-// "TTFTTTTTFT"
-// 1
+int longestOnes(vector<int> &nums, int k)
+{
+    return maxConsecutiveAnswers(nums, k);
+}
 
 int main()
 {
 
-    string test = "TTFTTFTT";
+    vector<int> test = {0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1};
 
-    int k = 1;
-    //
-    cout << maxConsecutiveAnswers(test, k);
+    int k = 3;
+
+    cout << longestOnes(test, k) << endl;
 
     return 0;
 }
