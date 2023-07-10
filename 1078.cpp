@@ -83,7 +83,7 @@ void dbg_out(Head H, Tail... T)
 //     return ans;
 // }
 
-int check(vector<int> &fin, vector<int> &nums)
+int check(vector<string> &fin, vector<int> &nums)
 {
     int k = fin.size();
 
@@ -95,11 +95,11 @@ int check(vector<int> &fin, vector<int> &nums)
     {
         int tem = 0;
 
-        int des = fin[i];
+        // int des = fin[i];
 
         for (int j = 0; j < n; j++)
         {
-            if ((des & (1 << j)))
+            if (fin[i][j] == '1')
             {
                 tem += nums[j];
             }
@@ -111,38 +111,66 @@ int check(vector<int> &fin, vector<int> &nums)
     return ans;
 }
 
-void recur(int index, vector<int> &nums, vector<int> &fin, int &ans)
+void recur(int index, vector<int> &nums, vector<string> &fin, int &ans)
 {
     int n = nums.size();
 
     int k = fin.size();
 
+    // dbg(fin);
+
     if (index == n)
     {
         ans = min(ans, check(fin, nums));
 
+        // for (int i = 0; i < k; i++)
+        // {
+        //     for (int j = 0; j < n; j++)
+        //     {
+        //         if ((fin[i] & (1 << j)))
+        //         {
+        //             cout << "1";
+        //         }
+        //         else
+        //         {
+        //             cout << "0";
+        //         }
+        //     }
         return;
+
+        //     cout << endl;
     }
 
     for (int i = index; i < n; i++)
     {
         for (int j = 0; j < k; j++)
         {
-            int des = fin[j];
+            // int des = fin[j];
 
-            fin[j] |= (1 << i);
+            // fin[j] |= (1 << i);
 
-            recur(index + 1, nums, fin, ans);
+            fin[j][i] = '1';
 
-            fin[j] ^= (1 << i);
+            recur(i + 1, nums, fin, ans);
+
+            // fin[j] &= ~(1 << i);
+
+            fin[i][j] = '0';
         }
     }
+
+    // cout << "Ended Here!" << endl;
+
+    // cout << endl;
 }
 
 int distributeCookies(vector<int> &cookies, int k)
 {
     int n = cookies.size();
-    vector<int> fin(k, 0);
+
+    string init(n, '0');
+
+    vector<string> fin(k, init);
 
     int ans = 1e9;
 
