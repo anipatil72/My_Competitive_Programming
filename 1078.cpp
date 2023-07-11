@@ -83,7 +83,7 @@ void dbg_out(Head H, Tail... T)
 //     return ans;
 // }
 
-int check(vector<string> &fin, vector<int> &nums)
+int check(vector<int> &fin, vector<int> &nums)
 {
     int k = fin.size();
 
@@ -95,11 +95,11 @@ int check(vector<string> &fin, vector<int> &nums)
     {
         int tem = 0;
 
-        // int des = fin[i];
+        int des = fin[i];
 
         for (int j = 0; j < n; j++)
         {
-            if (fin[i][j] == '1')
+            if ((des & (1 << j)))
             {
                 tem += nums[j];
             }
@@ -111,66 +111,35 @@ int check(vector<string> &fin, vector<int> &nums)
     return ans;
 }
 
-void recur(int index, vector<int> &nums, vector<string> &fin, int &ans)
+void recur(int index, vector<int> &nums, vector<int> &fin, int &ans)
 {
     int n = nums.size();
 
     int k = fin.size();
 
-    // dbg(fin);
-
     if (index == n)
     {
         ans = min(ans, check(fin, nums));
 
-        // for (int i = 0; i < k; i++)
-        // {
-        //     for (int j = 0; j < n; j++)
-        //     {
-        //         if ((fin[i] & (1 << j)))
-        //         {
-        //             cout << "1";
-        //         }
-        //         else
-        //         {
-        //             cout << "0";
-        //         }
-        //     }
         return;
-
-        //     cout << endl;
     }
 
-    for (int i = index; i < n; i++)
+    for (int j = 0; j < k; j++)
     {
-        for (int j = 0; j < k; j++)
-        {
-            // int des = fin[j];
+        int des = fin[j];
 
-            // fin[j] |= (1 << i);
+        fin[j] |= (1 << index);
 
-            fin[j][i] = '1';
+        recur(index + 1, nums, fin, ans);
 
-            recur(i + 1, nums, fin, ans);
-
-            // fin[j] &= ~(1 << i);
-
-            fin[i][j] = '0';
-        }
+        fin[j] &= ~(1 << index);
     }
-
-    // cout << "Ended Here!" << endl;
-
-    // cout << endl;
 }
 
 int distributeCookies(vector<int> &cookies, int k)
 {
     int n = cookies.size();
-
-    string init(n, '0');
-
-    vector<string> fin(k, init);
+    vector<int> fin(k, 0);
 
     int ans = 1e9;
 
