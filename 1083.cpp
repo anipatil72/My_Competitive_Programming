@@ -21,8 +21,78 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+void setParents(TreeNode *root, unordered_map<TreeNode *, TreeNode *> &m)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    if (root->left != NULL)
+    {
+        m[root->left] = root;
+    }
+
+    if (root->right != NULL)
+    {
+        m[root->right] = root;
+    }
+
+    setParents(root->left, m);
+
+    setParents(root->right, m);
+}
+
+void recur(TreeNode *root, unordered_map<TreeNode *, TreeNode *> &m, vector<int> &ans, int cur, TreeNode *parent)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    if (cur == 0)
+    {
+        ans.push_back(root->val);
+
+        return;
+    }
+
+    if (root->left != NULL && (root->left != parent))
+    {
+        recur(root->left, m, ans, cur - 1, root);
+    }
+
+    if (root->right != NULL && (root->right != parent))
+    {
+        recur(root->right, m, ans, cur - 1, root);
+    }
+
+    TreeNode *par = m[root];
+
+    if (par != NULL && (par != parent))
+    {
+        recur(par, m, ans, cur - 1, root);
+    }
+}
+
 vector<int> distanceK(TreeNode *root, TreeNode *target, int k)
 {
+    if (root == NULL)
+    {
+        return {};
+    }
+
+    unordered_map<TreeNode *, TreeNode *> m;
+
+    m[target] = NULL;
+
+    setParents(root, m);
+
+    vector<int> ans;
+
+    recur(target, m, ans, k, NULL);
+
+    return ans;
 }
 
 int main()
