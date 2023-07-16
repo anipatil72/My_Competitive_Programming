@@ -21,27 +21,65 @@ bool myComp(vector<int> &a, vector<int> &b)
     return a[1] < b[1];
 }
 
-int maxEvents(vector<vector<int>> &events)
+// int maxEvents(vector<vector<int>> &events)
+// {
+//     int n = events.size();
+
+//     sort(events.begin(), events.end(), myComp);
+
+//     int ans = 0, last = events[0][0];
+
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (events[i][0] <= last && events[i][1] >= last)
+//         {
+//             ans++;
+
+//             last++;
+//         }
+//     }
+
+//     return ans;
+// }
+
+// [[1,5],[1,5],[1,5],[2,3],[2,3]]
+
+int maxEvents(vector<vector<int>> &A)
 {
-    int n = events.size();
-
-    sort(events.begin(), events.end(), myComp);
-
-    int ans = 0, last = 0;
-
-    for (int i = 0; i < n; i++)
+    priority_queue<int, vector<int>, greater<int>> pq;
+    sort(A.begin(), A.end());
+    int i = 0, res = 0, d = 0, n = A.size();
+    while (pq.size() > 0 || i < n)
     {
+        if (pq.size() == 0)
+        {
+            d = A[i][0];
+        }
+
+        while (i < n && A[i][0] <= d)
+        {
+            pq.push(A[i++][1]);
+        }
+
+        pq.pop();
+        ++res, ++d;
+
+        while (pq.size() > 0 && pq.top() < d)
+        {
+            pq.pop();
+        }
     }
+    return res;
 }
 
 int main()
 {
 
     vector<vector<int>> test = {{1, 5},
-                                {1, 1},
-                                {2, 2},
-                                {3, 3},
-                                {4, 4}};
+                                {1, 5},
+                                {1, 5},
+                                {2, 3},
+                                {2, 3}};
 
     sort(test.begin(), test.end(), myComp);
 
@@ -49,6 +87,10 @@ int main()
     {
         cout << x[0] << " " << x[1] << endl;
     }
+
+    cout << "This is ans : " << endl;
+
+    cout << maxEvents(test) << endl;
 
     return 0;
 }
