@@ -98,41 +98,41 @@ map<long long, long long> factorize(long long n)
     return ans;
 }
 
-// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0200r0.html
-template <class Fun>
-class y_combinator_result
-{
-    Fun fun_;
+// // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0200r0.html
+// template <class Fun>
+// class y_combinator_result
+// {
+//     Fun fun_;
 
-public:
-    template <class T>
-    explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
-    template <class... Args>
-    decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
-};
-template <class Fun>
-decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
+// public:
+//     template <class T>
+//     explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
+//     template <class... Args>
+//     decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
+// };
+// template <class Fun>
+// decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
 
-template <typename A, typename B>
-ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << "," << p.second << ')'; }
-template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
-ostream &operator<<(ostream &os, const T_container &v)
-{
-    os << '{';
-    string sep;
-    for (const T &x : v)
-        os << sep << x, sep = ", ";
-    return os << '}';
-}
+// template <typename A, typename B>
+// ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << "," << p.second << ')'; }
+// template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
+// ostream &operator<<(ostream &os, const T_container &v)
+// {
+//     os << '{';
+//     string sep;
+//     for (const T &x : v)
+//         os << sep << x, sep = ", ";
+//     return os << '}';
+// }
 
-void dbg_out() { cerr << endl; }
-template <typename Head, typename... Tail>
-void dbg_out(Head H, Tail... T)
-{
-    cerr << ' ' << H;
-    dbg_out(T...);
-}
-#define dbg(...) cerr << '[' << __FILE__ << ':' << __LINE__ << "] (" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+// void dbg_out() { cerr << endl; }
+// template <typename Head, typename... Tail>
+// void dbg_out(Head H, Tail... T)
+// {
+//     cerr << ' ' << H;
+//     dbg_out(T...);
+// }
+// #define dbg(...) cerr << '[' << __FILE__ << ':' << __LINE__ << "] (" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 
 // -------------------Important Notes------------------- //
 // **For Interactive Problems remember to remove multi test cases condition** //
@@ -152,7 +152,7 @@ void solve()
 
     cin >> n;
 
-    multiset<int> p, q;
+    map<int, int> p, q;
 
     vector<int> a(n);
 
@@ -165,46 +165,49 @@ void solve()
 
     for (int i = 0; i < n; i++)
     {
-        q.insert(a[i]);
+        // q.insert(a[i]);
+
+        q[a[i]]++;
     }
 
     int ans = 0;
 
     vector<vector<int>> pos;
 
-    // dbg(p);
-
-    // dbg(q);
-
     for (int i = 0; i < n - 1; i++)
     {
-        p.insert(a[i]);
+        p[a[i]]++;
 
-        auto it = q.find(a[i]);
-
-        q.erase(it);
-
-        // dbg(p);
-
-        // dbg(q);
-
-        auto pb = p.end();
-
-        auto qb = q.end();
+        if (q[a[i]] == 1)
+        {
+            q.erase(a[i]);
+        }
+        else
+        {
+            q[a[i]]--;
+        }
 
         auto pf = p.begin();
 
         auto qf = q.begin();
 
+        auto pb = p.end();
+
+        auto qb = q.end();
+
         pb--;
 
         qb--;
 
-        if (((*pf) == 1) && ((*qf) == 1) && ((*pb) == p.size()) && ((*qb) == q.size()))
+        int ps = (i + 1);
+
+        int qs = (n - 1 - i);
+
+        if (((*pf).first == 1) && ((*qf).first == 1) && ((*pb).first == ps) && ((*qb).first == qs) && (p.size() == ps) && (q.size() == qs))
         {
             ans++;
 
-            pos.push_back({i + 1, n - 1 - i});
+            pos.push_back({ps, qs});
         }
     }
 
@@ -250,6 +253,39 @@ int main()
     // }
 
     // cout << endl;
+
+    // map<int, int> m;
+
+    // m[1]++;
+
+    // m[1]++;
+
+    // m[2]++;
+
+    // m[3]++;
+
+    // cout << "Before : " << endl;
+
+    // for (auto &x : m)
+    // {
+    //     cout << x.first << " " << x.second << endl;
+    // }
+
+    // m[1]--;
+
+    // m[1]--;
+
+    // if (m[1] == 0)
+    // {
+    //     m.erase(1);
+    // }
+
+    // cout << "After : " << endl;
+
+    // for (auto &x : m)
+    // {
+    //     cout << x.first << " " << x.second << endl;
+    // }
 
     int t = 1;
 
