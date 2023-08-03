@@ -11,31 +11,34 @@ using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 // typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
 
-bool canIWin(int maxChoosableInteger, int desiredTotal)
-{
-    if (maxChoosableInteger <= desiredTotal)
-    {
-        return true;
-    }
-
-    vector<int> dp(desiredTotal + 1, 0);
-
-    for (int i = 0; i <= maxChoosableInteger; i++)
-    {
-        dp[i] = 1;
-    }
-
-    int last = maxChoosableInteger + 1;
-
-    dp[maxChoosableInteger + 1] = 0;
-
-    for (int i = maxChoosableInteger + 2; i <= desiredTotal; i++)
-    {
-    }
-}
+// int minimumDeleteSum(string s1, string s2)
+// {
+//     return 0;
+// }
 
 int main()
 {
+
+    // char d = 's';
+
+    // int value = (d);
+
+    // cout << value << endl;
+
+    int x, y, z;
+
+    z = 4, x = 5, y = 9;
+
+    while (--x)
+    {
+        x = z + 1;
+
+        y = x - z;
+
+        z = y / 2;
+    }
+
+    cout << z << endl;
 
     return 0;
 }
