@@ -110,33 +110,105 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
+int recur(int index, int left, vector<int> &books, vector<int> &pages, vector<vector<int>> &dp)
+{
+    // int n = books.size();
+    if (index < 0)
+    {
+        return 0;
+    }
+
+    if (left == 0)
+    {
+        return 0;
+    }
+
+    if (dp[index][left] != -1)
+    {
+        return dp[index][left];
+    }
+
+    int ans = -1;
+
+    if (left >= books[index])
+    {
+
+        ans = pages[index] + recur(index - 1, left - books[index], books, pages, dp);
+    }
+
+    ans = max(ans, recur(index - 1, left, books, pages, dp));
+
+    return dp[index][left] = ans;
+}
+
+int knapSack(vector<int> &books, vector<int> &pages, int x)
+{
+    int n = books.size();
+
+    vector<vector<int>> dp(n, vector<int>(x + 1, 0));
+
+    for (int i = 0; i <= x; i++)
+    {
+        if (books[0] <= i)
+        {
+            dp[0][i] = pages[0];
+        }
+    }
+
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = 0; j <= x; j++)
+        {
+            int not_taken = 0 + dp[i - 1][j], taken = INT_MIN;
+
+            if (j >= books[i])
+            {
+
+                taken = pages[i] + dp[i - 1][j - books[i]];
+            }
+
+            dp[i][j] = max(taken, not_taken);
+        }
+    }
+
+    // for (int i = 0; i < n + 1; i++)
+    // {
+    //     for (int j = 0; j < x + 1; j++)
+    //     {
+    //         cout << dp[i][j] << " ";
+    //     }
+
+    //     cout << endl;
+    // }
+
+    return dp[n - 1][x];
+}
+
 void solve()
 {
-    int n;
+    int n, x;
 
-    cin >> n;
+    cin >> n >> x;
 
-    vector<int> a(n);
+    vector<int> books(n);
+
+    vector<int> pages(n);
 
     for (int i = 0; i < n; i++)
     {
-        cin >> a[i];
+        cin >> books[i];
     }
 
-    sort(a.begin(), a.end());
+    for (int i = 0; i < n; i++)
+    {
+        cin >> pages[i];
+    }
 
-        // return a.size();
+    // vector<vector<int>> dp(n, vector<int>(x + 1, -1));
 
-    cout << (int)(unique(a.begin(), a.end()) - a.begin()) << endl;
+    // cout << recur(n - 1, x, books, pages, dp) << endl;
 
-    // set<int> s;
-
-    // for (int i = 0; i < n; i++)
-    // {
-    //     s.insert(a[i]);
-    // }
-
-    // cout << s.size() << endl;
+    cout << knapSack(books, pages, x) << endl;
 }
 
 int main()
