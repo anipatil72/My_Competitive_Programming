@@ -31,4 +31,8 @@
 *.exe
 *.out
 *.app
+*.aux
+*.pdf
+*.log
+*.tex
 
