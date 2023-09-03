@@ -24,42 +24,6 @@ using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 // typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
 
-// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0200r0.html
-template <class Fun>
-class y_combinator_result
-{
-    Fun fun_;
-
-public:
-    template <class T>
-    explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
-    template <class... Args>
-    decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
-};
-template <class Fun>
-decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
-
-template <typename A, typename B>
-ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << "," << p.second << ')'; }
-template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
-ostream &operator<<(ostream &os, const T_container &v)
-{
-    os << '{';
-    string sep;
-    for (const T &x : v)
-        os << sep << x, sep = ", ";
-    return os << '}';
-}
-
-void dbg_out() { cerr << endl; }
-template <typename Head, typename... Tail>
-void dbg_out(Head H, Tail... T)
-{
-    cerr << ' ' << H;
-    dbg_out(T...);
-}
-#define dbg(...) cerr << '[' << __FILE__ << ':' << __LINE__ << "] (" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-
 // template <typename typC, typename typD>
 // istream &operator>>(istream &cin, pair<typC, typD> &a)
 // {
@@ -146,155 +110,170 @@ map<long long, long long> factorize(long long n)
 // alternatively ffs(n) also gives the index of the rightmost set bit
 // x |= (1 << i) ===> to set the i-th bit on
 
-void cycleRecur(int index, int &len, vector<int> &par, unordered_set<int> &dis)
+bool isEdge(int row, int col, int n, int m)
 {
-    // dbg(index);
-
-    if (dis.count(index) > 0)
+    if (row == 0 || col == 0 || row == n - 1 || col == m - 1)
     {
-        return;
+        return true;
     }
 
-    dis.insert(index);
-
-    len++;
-
-    cycleRecur(par[index] - 1, len, par, dis);
+    return false;
 }
 
-void setCycle(int index, vector<int> &par, unordered_set<int> &discom, vector<int> &dis, int len)
+bool isValid(int row, int col, int n, int m)
 {
-    if (discom.count(index) > 0)
+    if (row >= 0 && row < n && col >= 0 && col < m)
     {
-        return;
+        return true;
     }
 
-    // dbg(index, len);
-
-    discom.insert(index);
-
-    dis[index] = len;
-
-    setCycle(par[index] - 1, par, discom, dis, len);
-}
-
-int HandleCycle(int index, vector<int> &par, vector<int> &dis)
-{
-    int n = par.size();
-
-    unordered_set<int> com;
-
-    // vector<int> com(n, 1);
-
-    int len = 0;
-
-    cycleRecur(index, len, par, com);
-
-    // dbg(len);
-
-    // vector<int> discom(n, 1);
-
-    unordered_set<int> discom;
-
-    setCycle(index, par, discom, dis, len);
-
-    // dbg(dis);
-
-    return len;
-}
-
-void recurStunt(int index, vector<int> &par, vector<int> &dis)
-{
-
-    // dbg(index);
-
-    if (dis[index] == 0)
-    {
-        // return 0;
-
-        int des = HandleCycle(index, par, dis);
-
-        return;
-
-        // return dis[index];
-    }
-
-    dis[index] = 0;
-
-    recurStunt(par[index] - 1, par, dis);
-
-    // dis[index] = 1 + recur(par[index] - 1, par, dis);
-}
-
-int recur(int index, vector<int> &par, vector<int> &dis)
-{
-    if (dis[index] != 0)
-    {
-        return dis[index];
-    }
-
-    return dis[index] = 1 + recur(par[index] - 1, par, dis);
+    return false;
 }
 
 void solve()
 {
-    int n;
+    int n, m;
 
-    cin >> n;
+    cin >> n >> m;
 
-    vector<int> par(n);
+    vector<vector<int>> mat(n, vector<int>(m, 0));
+    vector<vector<int>> vis(n, vector<int>(m, -1));
+
+    queue<vector<int>> q;
+
+    vector<int> man;
 
     for (int i = 0; i < n; i++)
     {
-        cin >> par[i];
+        for (int j = 0; j < m; j++)
+        {
+            char d;
+
+            cin >> d;
+
+            if (d == '#')
+            {
+                mat[i][j] = 1;
+            }
+            else if (d == '.')
+            {
+
+                mat[i][j] = 0;
+            }
+            else if (d == 'M')
+            {
+                q.push({i, j, 0});
+                mat[i][j] = 0;
+
+                vis[i][j] = 0;
+            }
+            else
+            {
+                mat[i][j] = 0;
+
+                man.push_back(i);
+                man.push_back(j);
+            }
+        }
     }
 
-    // vector<vector<int>> adj(n);
-
-    vector<int> dis(n, -1);
-
-    // for (int i = 0; i < n; i++)
-    // {
-    //     if (i + 1 == par[i])
-    //     {
-    //         dis[i] = 1;
-    //     }
-    // }
-
-    for (int i = 0; i < n; i++)
+    while (!q.empty())
     {
-        if (dis[i] == -1)
-        {
-            recurStunt(i, par, dis);
+        vector<int> des = q.front();
 
-            // dis[i] = ans;
+        q.pop();
+
+        int row = des[0], col = des[1];
+
+        vis[des[0]][des[1]] = des[2];
+
+        if (isValid(row - 1, col, n, m) && mat[row - 1][col] == 0 && vis[row - 1][col] == -1)
+        {
+            q.push({row - 1, col, des[2] + 1});
+        }
+
+        if (isValid(row + 1, col, n, m) && mat[row + 1][col] == 0 && vis[row + 1][col] == -1)
+        {
+            q.push({row + 1, col, des[2] + 1});
+        }
+
+        if (isValid(row, col - 1, n, m) && mat[row][col - 1] == 0 && vis[row][col - 1] == -1)
+        {
+            q.push({row, col - 1, des[2] + 1});
+        }
+
+        if (isValid(row, col + 1, n, m) && mat[row][col + 1] == 0 && vis[row][col + 1] == -1)
+        {
+            q.push({row, col + 1, des[2] + 1});
         }
     }
 
     for (int i = 0; i < n; i++)
     {
-        if (dis[i] == 0)
+        for (int j = 0; j < m; j++)
         {
-            recur(i, par, dis);
-
-            // dis[i] = ans;
+            if (vis[i][j] == -1)
+            {
+                vis[i][j] = 1e8;
+            }
         }
     }
 
-    // for (int i = 0; i < n; i++)
-    // {
-    //     if (i + 1 == par[i])
-    //     {
-    //         dis[i] = 1;
-    //     }
-    // }
+    queue<pair<vector<int>, string>> fin;
 
-    for (int i = 0; i < n; i++)
+    fin.push({{man[0], man[1], 0}, ""});
+
+    while (!fin.empty())
     {
-        cout << dis[i] << " ";
+        auto tem = fin.front();
+
+        int row = tem.first[0], col = tem.first[1], dist = tem.first[2];
+
+        string cur = tem.second;
+
+        fin.pop();
+
+        if (isEdge(row, col, n, m))
+        {
+            cout << "YES" << endl;
+
+            cout << cur.length() << endl;
+
+            cout << cur << endl;
+
+            return;
+        }
+
+        if (isValid(row - 1, col, n, m) && mat[row - 1][col] == 0 && vis[row - 1][col] > dist + 1)
+        {
+            // q.push({row - 1, col, des[2] + 1});
+
+            fin.push({{row - 1, col, dist + 1}, cur + 'U'});
+        }
+
+        if (isValid(row + 1, col, n, m) && mat[row + 1][col] == 0 && vis[row + 1][col] > dist + 1)
+        {
+            // q.push({row + 1, col, des[2] + 1});
+
+            fin.push({{row + 1, col, dist + 1}, cur + 'D'});
+        }
+
+        if (isValid(row, col - 1, n, m) && mat[row][col - 1] == 0 && vis[row][col - 1] > dist + 1)
+        {
+            // q.push({row, col - 1, des[2] + 1});
+
+            fin.push({{row, col - 1, dist + 1}, cur + 'L'});
+        }
+
+        if (isValid(row, col + 1, n, m) && mat[row][col + 1] == 0 && vis[row][col + 1] > dist + 1)
+        {
+            // q.push({row, col + 1, des[2] + 1});
+
+            fin.push({{row, col + 1, dist + 1}, cur + 'R'});
+        }
     }
 
-    cout << endl;
+    cout << "NO" << endl;
 }
 
 int main()
