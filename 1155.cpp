@@ -13,16 +13,54 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 const long des = INT_MAX + 0LL + 1;
 
+// function to check prime
+bool isPrime(int n)
+{
+    if (n == 1)
+    {
+        return false;
+    }
+    if (n == 2 || n == 3)
+    {
+        return true;
+    }
+    if (n % 2 == 0 || n % 3 == 0)
+    {
+        return false;
+    }
+    for (int i = 5; i * i <= n; i = i + 6)
+    {
+        if (n % i == 0)
+        {
+            return false;
+        }
+        if (n % (i + 2) == 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main()
 {
 
-    int n;
+    for (int i = 0; i < 10; i++)
+    {
 
-    cin >> n;
+        int n;
 
-    // cout << n * n << endl;
+        cin >> n;
 
-    cout << des << endl;
+        if (isPrime(n))
+        {
+            cout << "The given number is prime." << endl;
+        }
+        else
+        {
+            cout << "The given number is not prime." << endl;
+        }
+    }
 
     return 0;
 }
