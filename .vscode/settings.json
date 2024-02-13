@@ -103,7 +103,7 @@
   "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
   "C_Cpp.intelliSenseEngineFallback": "Disabled",
   "[python]": {
-    "editor.defaultFormatter": "ms-python.python"
+    "editor.defaultFormatter": "ms-python.autopep8"
   },
   "python.formatting.provider": "none",
   "cph.general.onceMaintainerMessage": false
