@@ -15,6 +15,8 @@ int main()
 {
 
     cout << "This is all very standard, Nothing out of the ordinary!" << endl;
+    cout << "This is Littastic!" << endl;
+    cout << "For one canst choke on the joy of life without thy mouth full." << endl;
 
     return 0;
 }
