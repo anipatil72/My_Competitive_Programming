@@ -16,6 +16,7 @@ int main()
 
     cout << "This is all very standard, Nothing out of the ordinary!" << endl;
     cout << "This is Littastic!" << endl;
+    cout << "I felt like you really knew me, now it feels like you see through me." << endl;
     cout << "For one canst choke on the joy of life without thy mouth full." << endl;
 
     return 0;
