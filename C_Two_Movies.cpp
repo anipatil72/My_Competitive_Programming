@@ -215,6 +215,15 @@ int main()
     // freopen("input.txt","r",stdin);
     // freopen("output.txt","w",stdout);
 
+    // This is Consolas Font.y = ax + b.
+    // This is all very standard nothing out of the ordinary. All of this has been played before.
+    // See the thing with macs is that it is very very fast. But I don't like MacOS as much I liked Windows (I am talking about the features).
+    // There are so much bummers, like simple simple things that we take for granted in Windows, Tab shifting, right click,
+    // window tiling, and just so many things in general.
+    // But Windows computers are  slow, they are power hungry, and their chargers are very hefty and not very portable and utility friendly.
+    // Also, I have never seen speakers as good Mac on any Laptop. They are just at some other level.
+    // Battery is also very good on Macs, Windows Laptops can't compete with it in this area.
+
     ll t = 1;
 
     cin >> t;

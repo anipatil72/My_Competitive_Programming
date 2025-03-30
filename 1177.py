@@ -21,7 +21,11 @@ def kaprekar_routine(n):
 
 
 # Input any 4-digit number (with at least two different digits)
-starting_number = int(input("Enter a 4-digit number: "))
+# starting_number = int(input("Enter a 4-digit number: "))
+
+starting_number = 1233
 
 # Confirm convergence to 6174
 kaprekar_routine(starting_number)
+
+# Krantiveer Sangolli Rayanna Railway Station, Bengaluru

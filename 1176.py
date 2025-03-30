@@ -25,7 +25,7 @@ def subtract_strings(a, b):
     return dif_s
 
 
-origin = "4123"
+origin = "7394"
 
 small = ''.join(sorted(origin))
 high = ''.join(sorted(origin, reverse=True))
