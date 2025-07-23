@@ -2,6 +2,7 @@
 
 int main()
 {
-    system("git status");
+    system("rustc --version");
+    system("rustup --version");
     return 0;
 }

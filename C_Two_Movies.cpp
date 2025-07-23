@@ -116,96 +116,59 @@ void solve()
 
     cin >> n;
 
-    vector<int> a(n), b(n);
+    vector<vector<int>> a(2, vector<int>(n));
+
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> a[i][j];
+        }
+    }
+
+    int score_a = 0, score_b = 0;
 
     for (int i = 0; i < n; i++)
     {
-        cin >> a[i];
-    }
 
-    for (int i = 0; i < n; i++)
-    {
-        cin >> b[i];
-    }
-
-    int desa = 0, desb = 0, check = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-        if (a[i] == 1 && (b[i] == 0 || b[i] == -1))
-        {
-            desa++;
-        }
-        else if (b[i] == 1 && (a[i] == 0 || a[i] == -1))
-        {
-            desb++;
-        }
-        else if ((a[i] == 1 && b[i] == 1))
-        {
-            check++;
-        }
-        else if (a[i] == -1 && b[i] == -1)
-        {
-            check--;
-        }
-    }
-
-    int mini = min(desa, desb);
-
-    int maxi = max(desa, desb);
-
-    if (check > 0)
-    {
-
-        int diff = maxi - mini;
-
-        if (diff >= check)
-        {
-            mini += check;
-        }
-        else
-        {
-            check -= diff;
-
-            mini = maxi + check / 2;
-            maxi = mini;
-        }
-    }
-    else
-    {
-        // int mini = min(desa, desb);
-
-        // int maxi = max(desa, desb);
-
-        check = abs(check);
-
-        int diff = maxi - mini;
-
-        if (diff >= check)
-        {
-            maxi -= check;
-        }
-        else
+        if (a[0][i] == -1 && a[1][i] == -1)
         {
 
-            check -= diff;
-
-            maxi = mini;
-
-            if (check % 2 == 0)
+            if (score_a >= score_b)
             {
-                maxi -= check / 2;
-                mini -= check / 2;
+                score_a -= 1;
             }
             else
             {
-                maxi -= (check + 1) / 2;
-                mini -= (check + 1) / 2;
+                score_b -= 1;
+            }
+        }
+        else if (a[0][i] == 1 && a[1][i] == 1)
+        {
+            if (score_a >= score_b)
+            {
+                score_b += 1;
+            }
+            else
+            {
+                score_a += 1;
+            }
+        }
+        else
+        {
+            if (a[0][i] > a[1][i])
+            {
+                score_a += a[0][i];
+            }
+
+            else
+            {
+                score_b += a[1][i];
             }
         }
     }
 
-    cout << min(maxi, mini) << endl;
+    cout << min(score_a, score_b) << endl;
 }
 
 int main()
